@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGMI PRO LEAGUE 2026 | OFFICIAL</title>
+    
+    <!-- External Assets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #ff4d00;
+            --secondary: #00f2ff;
+            --bg-dark: #050506;
+            --card-bg: #111116;
+            --text-white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 0%, #1a0f00, #050506 70%);
+            color: var(--text-white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- LOADING SCREEN --- */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--card-bg);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* --- NAVIGATION BAR --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 8%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+        .logo span { color: #fff; }
+
+        .nav-links { display: flex; list-style: none; gap: 10px; }
+        .nav-btn {
+            text-decoration: none;
+            color: #aaa;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-btn:hover { color: #fff; background: var(--glass); }
+        .nav-btn.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            background: rgba(255, 77, 0, 0.05);
+        }
+
+        /* --- SECTIONS --- */
+        section {
+            display: none;
+            padding: 120px 8% 60px;
+            min-height: 100vh;
+            animation: slideUp 0.5s ease-out;
+        }
+        section.active { display: block; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .title span { color: var(--primary); }
+
+        /* --- HERO --- */
+        .hero {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200');
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .btn-join {
+            margin-top: 20px;
+            padding: 15px 40px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            font-family: 'Orbitron';
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+        }
+        .btn-join:hover { background: #fff; color: #000; transform: scale(1.05); }
+
+        /* --- TABLES & CARDS --- */
+        .card { background: var(--card-bg); padding: 2rem; border-radius: 15px; border: 1px solid var(--border); }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th { background: #1a1a20; color: var(--primary); padding: 15px; text-align: left; text-transform: uppercase; font-size: 0.8rem; }
+        td { padding: 15px; border-bottom: 1px solid #222; font-weight: 500; }
+        tr:hover { background: rgba(255,255,255,0.02); }
+
+        /* --- FORMS --- */
+        .form-group { margin-bottom: 15px; position: relative; }
+        input {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 5px;
+            outline: none;
+        }
+        input:focus { border-color: var(--primary); }
+        
+        .error-text {
+            color: #ff4d4d;
+            font-size: 0.8rem;
+            display: none;
+            margin-top: 5px;
+        }
+
+        /* --- LIVE TAG --- */
+        .live-dot {
+            height: 10px;
+            width: 10px;
+            background-color: #ff0000;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        footer { text-align: center; padding: 2rem; color: #666; font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .nav-links { gap: 5px; overflow-x: auto; padding-bottom: 5px; width: 100%; justify-content: center; }
+            .nav-btn { padding: 6px 10px; font-size: 0.7rem; }
+            .title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">BGMI<span>PRO</span></div>
+        <div class="nav-links">
+            <a onclick="showSection(event, 'home')" class="nav-btn active">Home</a>
+            <a onclick="showSection(event, 'register')" class="nav-btn">Register</a>
+            <a onclick="showSection(event, 'schedule')" class="nav-btn">Schedule</a>
+            <a onclick="showSection(event, 'standings')" class="nav-btn">Standings</a>
+            <a onclick="showSection(event, 'rules')" class="nav-btn">Rules</a>
+            <a onclick="showSection(event, 'live')" class="nav-btn" style="color: #ff4d4d;"><span class="live-dot"></span>Live</a>
+        </div>
+    </nav>
+
+    <!-- 1. HOME SECTION -->
+    <section id="home" class="active">
+        <div class="hero">
+            <h1 class="title">BATTLEGROUNDS <span>SERIES 2026</span></h1>
+            <p>"Enter the Battlegrounds and Rule the Lobby.”</p>
+            <button class="btn-join" onclick="showSection(null, 'register')">REGISTER NOW</button>
+        </div>
+    </section>
+
+    <!-- 2. REGISTER SECTION -->
+    <section id="register">
+        <h2 class="title">SQUAD <span>REGISTRATION</span></h2>
+        <div class="card" style="max-width: 600px; margin: auto;">
+            <form id="regForm">
+                <div class="form-group"><input type="text" id="tName" placeholder="Team Name" required></div>
+                <div class="form-group"><input type="text" id="tLeader" placeholder="In-Game Leader (IGL) Name" required></div>
+                <div class="form-group"><input type="email" id="tEmail" placeholder="Email Address" required></div>
+                <div class="form-group">
+                    <!-- Updated input for 10-digit number validation -->
+                    <input type="text" id="tPhone" placeholder="WhatsApp Number (10 Digits)" maxlength="10" required>
+                    <p id="phoneError" class="error-text">Please enter a valid 10-digit number (Numbers only).</p>
+                </div>
+                <div class="form-group"><input type="text" id="tId" placeholder="BGMI Character ID" required></div>
+                <button type="submit" class="btn-join" style="width: 100%; clip-path: none;">SUBMIT ENTRY</button>
+            </form>
+            <p id="regMsg" style="text-align: center; margin-top: 15px; color: var(--secondary); display: none;">Registration Successful!</p>
+        </div>
+    </section>
+
+    <!-- 3. SCHEDULE SECTION -->
+    <section id="schedule">
+        <h2 class="title">MATCH <span>SCHEDULE</span></h2>
+        <div class="card">
+            <table>
+                <tr><th>Match</th><th>Map</th><th>Date</th><th>Time</th></tr>
+                <tr><td>Qualifier 1</td><td>Erangel</td><td>May 20</td><td>07:00 PM</td></tr>
+                <tr><td>Qualifier 2</td><td>Miramar</td><td>May 20</td><td>08:00 PM</td></tr>
+                <tr><td>Semi Finals</td><td>Sanhok</td><td>May 22</td><td>07:30 PM</td></tr>
+                <tr><td>Grand Finale</td><td>Erangel</td><td>May 25</td><td>09:00 PM</td></tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- 4. STANDINGS SECTION -->
+    <section id="standings">
+        <h2 class="title">POINTS <span>TABLE</span></h2>
+        <div class="card">
+            <table>
+                <tr><th>Rank</th><th>Team</th><th>WWCD</th><th>Kills</th><th>Total</th></tr>
+                <tr><td>#1</td><td>Team Soul</td><td>2</td><td>45</td><td>85</td></tr>
+                <tr><td>#2</td><td>GodLike</td><td>1</td><td>40</td><td>72</td></tr>
+                <tr><td>#3</td><td>Global Esports</td><td>0</td><td>32</td><td>55</td></tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- 5. RULES SECTION -->
+    <section id="rules">
+        <h2 class="title">OFFICIAL <span>RULES</span></h2>
+        <div class="card">
+            <ul style="list-style: none; padding: 10px;">
+                <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="color:var(--primary)"></i> Mobile Only (No Emulators/Tablets).</li>
+                <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="color:var(--primary)"></i> WhatsApp number must be a valid 10-digit Indian/Global mobile number.</li>
+                <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="color:var(--primary)"></i> Levels must be 40+ to prevent hackers.</li>
+                <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="color:var(--primary)"></i> Teaming up results in immediate permanent ban.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 6. LIVE SECTION -->
+    <section id="live">
+        <h2 class="title">LIVE <span>BROADCAST</span></h2>
+        <div class="card" style="aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; background: #000;">
+            <div style="text-align: center;">
+                <i class="fab fa-youtube fa-4x" style="color: #ff0000; margin-bottom: 20px;"></i>
+                <p>Stream will begin at 07:00 PM IST</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2026 BGMI PRO LEAGUE | ALL RIGHTS RESERVED
+    </footer>
+
+    <script>
+        // 1. Loading screen logic
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+            }, 1000);
+        });
+
+        // 2. Navigation / Section Switcher Logic
+        function showSection(event, sectionId) {
+            if (event) event.preventDefault();
+
+            const sections = document.querySelectorAll('section');
+            sections.forEach(s => s.classList.remove('active'));
+
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(sectionId).classList.add('active');
+
+            const activeBtn = document.querySelector(`[onclick*='${sectionId}']`);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            window.scrollTo(0, 0);
+        }
+
+        // 3. Form Validation and Submission Logic
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const phoneInput = document.getElementById('tPhone');
+            const phoneError = document.getElementById('phoneError');
+            const phoneValue = phoneInput.value;
+            const msg = document.getElementById('regMsg');
+
+            // Regex for exactly 10 digits
+            const phonePattern = /^[0-9]{10}$/;
+
+            if (!phonePattern.test(phoneValue)) {
+                phoneError.style.display = 'block';
+                phoneInput.style.borderColor = '#ff4d4d';
+                return;
+            } else {
+                phoneError.style.display = 'none';
+                phoneInput.style.borderColor = '#333';
+            }
+
+            // Success feedback
+            msg.style.display = 'block';
+            this.reset();
+            setTimeout(() => msg.style.display = 'none', 4000);
+        });
+
+        // Instant validation as user types
+        document.getElementById('tPhone').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, ''); // Remove non-numbers instantly
+            if (this.value.length === 10) {
+                document.getElementById('phoneError').style.display = 'none';
+                this.style.borderColor = '#333';
+            }
+        });
+    </script>
+</body>
+</html>
